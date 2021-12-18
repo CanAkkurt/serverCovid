@@ -7,6 +7,11 @@ const getPlaceById = async (ctx) => {
  
 };
 
+const getCasesBetweenXDays = async (ctx) => {
+	const response = await caseService.getCasesBetweenXDays(ctx.params.date1,ctx.params.date2);
+  ctx.body =response;
+};
+
 
 
 
@@ -17,6 +22,7 @@ module.exports = (app) => {
 
  
  router.get('/:id', getPlaceById);
+ router.get('/dataBetween/:date1&:date2',getCasesBetweenXDays);
 
 
  app.use(router.routes()).use(router.allowedMethods());

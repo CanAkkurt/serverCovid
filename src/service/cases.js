@@ -1,4 +1,5 @@
 const config = require('config');
+const { log } = require('winston');
 const { getChildLogger } = require('../core/logging');
 const caseRepository = require('../repository/cases');
 
@@ -15,8 +16,25 @@ const getById = (id) => {
 	return caseRepository.findById(id);
 };
 
+const getCasesBetweenXDays = async(date1,date2) => {
+	debugLog(`Fetching case with date between ${date1} end ${date2}`);
+	const data =await caseRepository.getCasesBetweenXDays(date1,date2)
+	
+;
+	return {
+		data:data,
+	
+	
+	}
+
+
+
+				
+	
+}
 
 
 module.exports = {
 	getById,
+	getCasesBetweenXDays
 };
