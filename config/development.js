@@ -12,8 +12,8 @@ module.exports = {
     host: 'localhost',
     port: 3306,
     name: 'covid',
-    username: 'root',
-    password: 'Kadir.2010'
+    username: 'admin',
+    password: 'admin'
   },
   pagination: {
     limit: 100,

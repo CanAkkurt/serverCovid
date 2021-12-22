@@ -3,8 +3,8 @@ const userService = require('../service/user');
 
 const getAllUsers = async (ctx) => {
   const users = await userService.getAll(
-    ctx.query.limit && Number(ctx.query.limit),
-    ctx.query.offset && Number(ctx.query.offset),
+     Number(ctx.query.limit),
+     Number(ctx.query.offset),
   );
   ctx.body = users;
 };

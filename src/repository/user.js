@@ -10,7 +10,7 @@ const findAll = ({
   return getKnex()(tables.user)
     .select()
     .limit(limit)
-    .offset()
+    .offset(offset)
     .orderBy('name', 'ASC');
 };
 
