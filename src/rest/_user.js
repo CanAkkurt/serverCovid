@@ -37,6 +37,10 @@ const register = async (ctx) => {
 }
 
 
+const updateByIdPermissions = async (ctx) => {
+  const response = await userService.updateByIdPermissions(ctx.params.id,ctx.request.body);
+  ctx.body = response;
+}
 
 
 
@@ -56,6 +60,7 @@ module.exports = function installUsersRoutes(app) {
   router.get('/:id', getUserById);
   router.put('/:id', updateUserById);
   router.delete('/:id', deleteUserById);
+  router.put('/permissions/:id',updateByIdPermissions);
 
   app
     .use(router.routes())

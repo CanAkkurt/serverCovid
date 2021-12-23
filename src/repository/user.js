@@ -64,9 +64,7 @@ const updateById = async (id, {
 }) => {
   try {
     await getKnex()(tables.user)
-      .update({
-        name,
-      })
+      .update({name,})
       .where('id', id);
     return await findById(id);
   } catch (error) {
@@ -77,6 +75,30 @@ const updateById = async (id, {
     throw error;
   }
 };
+
+const updateByIdPermissions = async ( id, {
+  permission,
+}) => {
+  try {
+    await getKnex()(tables.user)
+      .update("roles",JSON.stringify(permission))
+      .where('id', id);
+    return await findById(id);
+  } catch (error) {
+    const logger = getChildLogger('users-repo');
+    logger.error('Error in updateByIdPermissions', {
+      error,
+    }); 
+    console.log(permission);
+    console.log(id);
+    throw error;
+  }
+ 
+};
+
+
+
+
 
 
 
@@ -104,4 +126,5 @@ module.exports = {
   updateById,
   deleteById,
   findByEmail,
+  updateByIdPermissions
 };

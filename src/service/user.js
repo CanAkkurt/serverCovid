@@ -155,6 +155,14 @@ const deleteById = async (id) => {
   }
 };
 
+const updateByIdPermissions = async (id,{permission}) => {
+  debugLog(`updating userprivileges with id ${id}`);
+  const updated = await userRepository.updateByIdPermissions(id,{permission});
+
+  return updated;
+};
+
+
 module.exports = {
   login,
   register,
@@ -162,4 +170,5 @@ module.exports = {
   getById,
   updateById,
   deleteById,
+  updateByIdPermissions
 };

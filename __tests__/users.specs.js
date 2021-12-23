@@ -126,12 +126,11 @@ describe('user', () => {
         .where('id', userToDelete)
         .delete();
     });
-
     test('it should 201 and return the created user', async () => {
       const response = await request.post(urlRegister)
         .send({
           "name": 'Kadir akkurt',
-          "email": 'kadircakkurt@hotmail.com',
+          "email": 'kadircakkurtsss@hotmail.com',
           "password":"test",
           
         });
