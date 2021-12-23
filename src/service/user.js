@@ -2,8 +2,8 @@ const { getChildLogger } = require('../core/logging');
 const { hashPassword,verifyPassword } = require('../core/password.js');
 const userRepository = require('../repository/user');
 const Role = require('../core/roles.js');
-const { generateJWT } = require('../core/jwt');
-
+const { generateJWT ,verifyJWT} = require('../core/jwt');
+const ServiceError = require('../core/serviceError');
 
 const debugLog = (message, meta = {}) => {
 	if (!this.logger) this.logger = getChildLogger('user-service');
@@ -100,14 +100,7 @@ const login  = async(email,password) =>{
   };
 };
 
-/**
- * Get the user with the given id.
- *
- * @param {string} id - Id of the user to get.
- *
- * @throws {ServiceError} One of:
- * - NOT_FOUND: No user with the given id could be found.
- */
+
 const getById = async (id) => {
   debugLog(`Fetching user with id ${id}`);
   const user = await userRepository.findById(id);
@@ -120,32 +113,13 @@ const getById = async (id) => {
 };
 
 
-/**
- * Update an existing user.
- *
- * @param {string} id - Id of the user to update.
- * @param {object} user - User to save.
- * @param {string} [user.name] - Name of the user.
- * @param {number} [user.email] - Email of the user.
- *
- * @throws {ServiceError} One of:
- * - NOT_FOUND: No user with the given id could be found.
- * - VALIDATION_FAILED: A user with the same email exists.
- */
 const updateById = (id, { name, email }) => {
   debugLog(`Updating user with id ${id}`, { name, email });
   return userRepository.updateById(id, { name, email });
 };
 
 
-/**
- * Delete an existing user.
- *
- * @param {string} id - Id of the user to delete.
- *
- * @throws {ServiceError} One of:
- * - NOT_FOUND: No user with the given id could be found.
- */
+
 const deleteById = async (id) => {
   debugLog(`Deleting user with id ${id}`);
   const deleted = await userRepository.deleteById(id);
@@ -162,6 +136,43 @@ const updateByIdPermissions = async (id,{permission}) => {
   return updated;
 };
 
+const checkAndParseSession = async (authHeader) => {
+  if (!authHeader) {
+    throw ServiceError.unauthorized('You need to be signed in');
+  }
+
+  if (!authHeader.startsWith('Bearer ')) {
+    throw ServiceError.unauthorized('Invalid authentication token');
+  }
+
+  const authToken = authHeader.substr(7);
+  try {
+    const {
+      roles, userId,
+    } = await verifyJWT(authToken);
+
+    return {
+      userId,
+      roles,
+      authToken,
+    };
+  } catch (error) {
+    const logger = getChildLogger('user-service');
+    logger.error(error.message, { error });
+    throw ServiceError.unauthorized(error.message);
+  }
+};
+
+
+
+
+const checkRole = (role, roles) => {
+  const hasPermission = roles.includes(role);
+
+  if (!hasPermission) {
+    throw ServiceError.forbidden('You are not allowed to view this part of the application');
+  }
+};
 
 module.exports = {
   login,
@@ -170,5 +181,7 @@ module.exports = {
   getById,
   updateById,
   deleteById,
-  updateByIdPermissions
+  updateByIdPermissions,
+  checkRole,
+  checkAndParseSession,
 };

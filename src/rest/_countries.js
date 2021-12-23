@@ -1,36 +1,17 @@
 const Router = require('@koa/router');
 const countriesService = require('../service/countries.js');
+const Joi = require('joi');
+const validate = require('./_validation.js');
 
 const getAllPlaces = async (ctx) => {
 	ctx.body = await countriesService.getAll();
 };
-
-// const createPlace = async (ctx) => {
-// 	const newPlace = await placeService.create(ctx.request.body);
-// 	ctx.body = newPlace;
-// 	ctx.status = 201;
-// };
-
-// const getPlaceById = async (ctx) => {
-// 	ctx.body = await placeService.getById(ctx.params.id);
-// };
-
-// const updatePlace = async (ctx) => {
-// 	ctx.body = await placeService.updateById(ctx.params.id, ctx.request.body);
-// };
-
-// const deletePlace = async (ctx) => {
-// 	await placeService.deleteById(ctx.params.id);
-// 	ctx.status = 204;
-// };
-
-/**
- * Install transaction routes in the given router.
- *
- * @param {Router} app - The parent router.
- */
-
-
+getAllPlaces.validationScheme = {
+  query: Joi.object({
+    limit: Joi.number().integer().positive().max(1000).optional(),
+    offset: Joi.number().integer().min(0).optional(),
+  }).and('limit', 'offset'),
+};
 
 
 module.exports = (app) => {
@@ -38,11 +19,8 @@ module.exports = (app) => {
 		prefix: '/countries',
 	});
 
-	router.get('/',getAllPlaces);
-	// router.post('/', createPlace);
-	// router.get('/:id', getPlaceById);
-	// router.put('/:id', updatePlace);
-	// router.delete('/:id', deletePlace);
+	router.get('/',validate(getAllPlaces.validationScheme),getAllPlaces);
+
 
 	app.use(router.routes()).use(router.allowedMethods());
 };
