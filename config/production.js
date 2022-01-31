@@ -4,7 +4,8 @@ module.exports = {
     disabled: false,
   },
   cors: {
-    origins : ['http://localhost:3000'],
+    origins : ['http://localhost:3000',
+    'https://canakkurt.github.io/CoronaMap/'],
     maxAge: 3 * 60 * 60,
   },
   database: {
