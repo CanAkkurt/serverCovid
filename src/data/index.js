@@ -80,40 +80,40 @@ async function initializeData() {
   }
 
   // Run migrations
-  let migrationsFailed = true;
-  try {
-    await knexInstance.migrate.latest();
-    migrationsFailed = false;
-  } catch (error) {
-    logger.error('Error while migrating the database', {
-      error,
-    });
-  }
+  // let migrationsFailed = true;
+  // try {
+  //   await knexInstance.migrate.latest();
+  //   migrationsFailed = false;
+  // } catch (error) {
+  //   logger.error('Error while migrating the database', {
+  //     error,
+  //   });
+  // }
 
-  // Undo last migration if something failed
-  if (migrationsFailed) {
-    try {
-      await knexInstance.migrate.down();
-    } catch (error) {
-      logger.error('Error while undoing last migration', {
-        error,
-      });
-    }
+  // // Undo last migration if something failed
+  // if (migrationsFailed) {
+  //   try {
+  //     await knexInstance.migrate.down();
+  //   } catch (error) {
+  //     logger.error('Error while undoing last migration', {
+  //       error,
+  //     });
+  //   }
 
-    // No point in starting the server
-    throw new Error('Migrations failed');
-  }
+  //   // No point in starting the server
+  //   throw new Error('Migrations failed');
+  // }
 
-  // Run seeds in development
-  if (isDevelopment) {
-    try {
-      await knexInstance.seed.run();
-    } catch (error) {
-      logger.error('Error while seeding database', {
-        error,
-      });
-    }
-  }
+  // // Run seeds in development
+  // if (isDevelopment) {
+  //   try {
+  //     await knexInstance.seed.run();
+  //   } catch (error) {
+  //     logger.error('Error while seeding database', {
+  //       error,
+  //     });
+  //   }
+  // }
 
   logger.info('Succesfully connected to the database');
 
