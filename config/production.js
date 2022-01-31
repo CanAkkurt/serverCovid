@@ -7,6 +7,7 @@ module.exports = {
     origins : ['http://localhost:3000',
     'https://canakkurt.github.io'],
     maxAge: 3 * 60 * 60,
+    
   },
   database: {
     client: 'mysql2',
