@@ -5,7 +5,7 @@ module.exports = {
   },
   cors: {
     origins : ['http://localhost:3000',
-    'https://canakkurt.github.io/CoronaMap/'],
+    'https://canakkurt.github.io'],
     maxAge: 3 * 60 * 60,
   },
   database: {
