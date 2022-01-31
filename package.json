@@ -3,7 +3,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "npx env-cmd nodemon src/index.js",
-    "test:ci":"jest"
+    "test:ci":"jest",
+    "web":"node src/index.js"
    
   },
   "jest": {

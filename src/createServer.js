@@ -52,7 +52,8 @@ module.exports = async function createServer () {
 
         start(){
             return new Promise((resolve) => {
-            app.listen(3000);
+						const port = process.env.PORT || 3000;
+            app.listen(port);
             logger.info(`🚀 Server listening on http://localhost:3000`);
             resolve()
             })
